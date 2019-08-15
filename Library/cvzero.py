@@ -2,10 +2,8 @@ import cv2, numpy as np
 
 font = cv2.FONT_HERSHEY_SIMPLEX
 
-class Tracker:
+class CVzero:
     def __init__(self):
-        # What mode?
-        self.mode = 'learn'
         # Propertieis about the learnt object
         self.typical_rgb = np.array([0, 0, 0])
         self.max_rgb = np.array([0, 0, 0])
@@ -17,17 +15,18 @@ class Tracker:
         self.angle = 0
         self.last_seen = 0
 
+    def learnObjects(self, image):
+        # copy image temporarily to overlay guide text
+        temp = image.copy()
+        # Add guide text to temp image
+        cv2.putText(temp, "Select Object and press enter to learn it, or 'C' to Cancel", (10, 20), font, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
+        # Get start and end coordinate pairs of user drawn ROI rectangle
+        selection = cv2.selectROI("Learn Objects", temp, False, False)
+        cv2.destroyWindow("Learn Objects")
+        # return ROI of original image using coordiantes in "selection"
+        return image[selection[1]:selection[1]+selection[3], selection[0]:selection[0]+selection[2]]
 
-    def new_image(self, image):
-        if self.mode == 'learn':
-            self._learn_block(image)
-        elif self.mode == 'tracker':
-            return self._get_block(image)
-
-    def _learn_block(image):
-        pass
-
-    def _get_block(self, image):
+    def trackObjects(self, image):
         # Flag for whether or not valid objects that pass all filters were detected
         valid_objects = False
         self.objects = {}
@@ -49,7 +48,7 @@ class Tracker:
             if(area>300):
                 x,y,w,h = cv2.boundingRect(contour)
                 # Draw bounding box     
-                im2 = cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),3)
+                im2 = cv2.rectangle(image.copy(),(x,y),(x+w,y+h),(255,0,0),3)
                 # Add object ID to center of detected object
                 cv2.putText(im2, str(obj_id), (int(x + w/2), int(y + h/2)), font, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
                 # Add object and it's parameters to "objects" dict
