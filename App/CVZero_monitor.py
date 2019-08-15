@@ -1,4 +1,8 @@
-import cv2, numpy as np, picamera, picamera.array, time
+import cv2
+import numpy as np
+import picamera
+import picamera.array
+import time
 
 # Setup Pi Camera
 camera = picamera.PiCamera()
@@ -11,6 +15,7 @@ time.sleep(0.1)
 
 font = cv2.FONT_HERSHEY_SIMPLEX
 
+
 def select_roi(image):
     # copy image temporarily to overlay guide text
     temp = image.copy()
@@ -21,13 +26,14 @@ def select_roi(image):
     # return ROI of original image using coordiantes in "selection"
     return image[selection[1]:selection[1]+selection[3], selection[0]:selection[0]+selection[2]]
 
+
 for frame in camera.capture_continuous(rawCap, format="bgr", use_video_port=True):
-    # copy image temporarily to overlay guide text
-    temp = frame.array.copy()
+    # copy image to overlay guide text
+    out = frame.array.copy()
     # Add guide text to temp image
-    cv2.putText(temp, "Press 'L' to enter Learn Mode", (10, 20), font, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
+    cv2.putText(out, "Press 'L' to enter Learn Mode", (10, 20), font, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
     # Show frame with guide text
-    cv2.imshow("CV Zero Monitor", temp)    
+    cv2.imshow("CV Zero Monitor", out)    
     
     key = cv2.waitKey(1) & 0xFF
     # Clear stream
