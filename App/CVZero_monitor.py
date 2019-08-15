@@ -33,8 +33,8 @@ for frame in camera.capture_continuous(rawCap, format="bgr", use_video_port=True
     # Add guide text to temp image
     cv2.putText(out, "Press 'L' to enter Learn Mode", (10, 20), font, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
     # Show frame with guide text
-    cv2.imshow("CV Zero Monitor", out)    
-    
+    cv2.imshow("CV Zero Monitor", out)
+
     key = cv2.waitKey(1) & 0xFF
     # Clear stream
     rawCap.truncate(0)
