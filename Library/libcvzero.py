@@ -1,4 +1,5 @@
-import cv2, numpy as np
+import cv2
+import numpy as np
 from sklearn.cluster import KMeans
 
 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -17,8 +18,7 @@ class Tracker:
         self.size = [0, 0]
         self.angle = 0
         self.last_seen = 0
-
-
+        
     def new_image(self, image):
         if self.mode == 'learn':
             self._learn_block(image)
@@ -26,7 +26,6 @@ class Tracker:
             return self._get_block(image)
 
     def _learn_block(image):
-        
         pass
 
     def _get_block(self, image):
@@ -51,7 +50,7 @@ class Tracker:
             if(area>300):
                 x,y,w,h = cv2.boundingRect(contour)
                 # Draw bounding box     
-                im2 = cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),3)
+                im2 = cv2.rectangle(image,(x, y), (x+w, y+h),(255,0,0),3)
                 # Add object ID to center of detected object
                 cv2.putText(im2, str(obj_id), (int(x + w/2), int(y + h/2)), font, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
                 # Add object and it's parameters to "objects" dict
@@ -63,77 +62,57 @@ class Tracker:
         # return input image (no valid objects detected)
         return image, self.objects
 
-
+    
 class Learn:
-
     def __init__(self):
-
+        # Image to extract colour values from
         self.image = ""
-
-
-
+        
     def make_histogram(self, cluster):
-        """
-        Count the number of pixels in each cluster
-        :param: KMeans cluster
-        :return: numpy histogram
-        """
+        #Count the number of pixels in each cluster
+        #:param: KMeans cluster
+        #:return: numpy histogram
         numLabels = np.arange(0, len(np.unique(cluster.labels_)) + 1)
         hist, _ = np.histogram(cluster.labels_, bins=numLabels)
         hist = hist.astype('float32')
         hist /= hist.sum()
         return hist
-
-
-    def make_bar(self, height, width, color):
-        """
-        Create an image of a given color
-        :param: height of the image
-        :param: width of the image
-        :param: BGR pixel values of the color
-        :return: tuple of bar, rgb values, and hsv values
-        """
+    
+    def make_bar(self, height,
+                 width, colour):
+        #Create an image of a given colour
+        #:param: height of the image
+        ##:param: width of the image
+        #:param: BGR pixel values of the colour
+        #:return: tuple of bar, rgb values, and hsv values
         bar = np.zeros((height, width, 3), np.uint8)
-        bar[:] = color
-        red, green, blue = int(color[2]), int(color[1]), int(color[0])
+        bar[:] = colour
+        red, green, blue = int(colour[2]), int(colour[1]), int(colour[0])
         hsv_bar = cv2.cvtColor(bar, cv2.COLOR_BGR2HSV)
         hue, sat, val = hsv_bar[0][0]
         return bar, (red, green, blue), (hue, sat, val)
-
-
+    
     def get_dominant_colour(self):
-        # START HERE
         img = cv2.imread(self.image)
         height, width, _ = np.shape(img)
-
         # reshape the image to be a simple list of RGB pixels
         image = img.reshape((height * width, 3))
-
-        # we'll pick the most common colors
-        num_clusters = 1 # specify for the 5 most common colours etc here
+        # pick the most common colours, in this case [1]
+        num_clusters = 1 
         clusters = KMeans(n_clusters=num_clusters)
         clusters.fit(image)
-
         # count the dominant colors and put them in "buckets"
         histogram = self.make_histogram(clusters)
         # then sort them, most-common first
         combined = zip(histogram, clusters.cluster_centers_)
         combined = sorted(combined, key=lambda x: x[0], reverse=True)
-
         bars = []
         hsv_values = []
         for index, rows in enumerate(combined):
             bar, rgb, hsv = self.make_bar(100, 100, rows[1])
             hsv_values.append(hsv)
             bars.append(bar)
-
         bgr = reversed(rgb)
         print(tuple(bgr))
-
         # Outputs the colour in BGR format 
         return tuple(bgr)
-
-
-    
-
-        
