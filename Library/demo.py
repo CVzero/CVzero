@@ -41,14 +41,7 @@ for frame in camera.capture_continuous(rawCap, format="bgr", use_video_port=True
     key = cv2.waitKey(1) & 0xFF
     rawCap.truncate(0)
 
-    # Activate Learn mode if 'l' is pressed
-    if key == ord("l"):
-        # Current implementation of Learn: Get user drawn ROI of the object
-        roi_object = tracker.learnObjects(frame.array)
-        if len(roi_object) > 0:
-            # Show ROI of object
-            cv2.imshow("Object ROI", roi_object)
-    elif key == ord("q"):
+    if key == ord("q"):
         break
 
 cv2.destroyAllWindows()  

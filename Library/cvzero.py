@@ -16,15 +16,7 @@ class CVzero:
         self.last_seen = 0
 
     def learnObjects(self, image):
-        # copy image temporarily to overlay guide text
-        temp = image.copy()
-        # Add guide text to temp image
-        cv2.putText(temp, "Select Object and press enter to learn it, or 'C' to Cancel", (10, 20), font, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
-        # Get start and end coordinate pairs of user drawn ROI rectangle
-        selection = cv2.selectROI("Learn Objects", temp, False, False)
-        cv2.destroyWindow("Learn Objects")
-        # return ROI of original image using coordiantes in "selection"
-        return image[selection[1]:selection[1]+selection[3], selection[0]:selection[0]+selection[2]]
+        pass
 
     def trackObjects(self, image):
         # Flag for whether or not valid objects that pass all filters were detected
