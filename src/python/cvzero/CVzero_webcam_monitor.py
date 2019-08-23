@@ -102,7 +102,7 @@ def learn_button_handler():
         cv2.imshow("roi", roi)
         roi = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
         cv2.imshow("image HSV", roi)
-        HSV_LB, HSV_UB = k_means(roi, 1)
+        HSV_LB, HSV_UB = k_means(roi, 5)
         BGR_LB, BGR_UB = cv2.cvtColor(np.array([[HSV_LB]]), cv2.COLOR_HSV2BGR), cv2.cvtColor(np.array([[HSV_UB]]), cv2.COLOR_HSV2BGR)
         print("HSV_LB:", HSV_LB, "HSV_UB:", HSV_UB, "BGR_LB:", BGR_LB, "BGR_UB:", BGR_UB)
     
