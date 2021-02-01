@@ -2,6 +2,8 @@
 # CVzero
 ### Making computer vision simple for everyone!
 
+Not much going on with this at the moment :-(
+
 PLEASE NOTE: It still early days and we don't have running code or example code, watch this space!
 
 CVzero is a Python 3 library that aims to simplify computer vision for the Raspberry Pi* robotics.
