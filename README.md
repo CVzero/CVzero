@@ -9,9 +9,16 @@ PLEASE NOTE: It still early days and we don't have running code or example code,
 CVzero is a Python 3 library that aims to simplify computer vision for the Raspberry Pi* robotics.
 As well as the library, a companion App for the Raspberry Pi is being developed for selecting an object and displaying its colour signature. It will be possible to save the colour signatures collected as a file for the library to use.
 
-Please be patient with us as we are all volunteers and have a life outside of OpenCV
+Please be patient with us as we are all volunteers and have a life outside of OpenCV.
 
-The CVzero library requires that OpenCV and its dependencies are installed.
+## Required Dependencies
+
+The CVzero library requires that OpenCV and its dependencies are installed. Including:
+
+* opencv-python
+
+* Scikit
+
 
 We have a Discord channel for chat and collaboration, https://discord.gg/Vbdyjdn. Join with this URL!
 
